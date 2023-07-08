@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en" style="height: 100%">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>每天总交易额</title>
+    <script src="https://cdn.bootcdn.net/ajax/libs/echarts/5.2.2/echarts.js"></script>
+    <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+</head>
+
+<body style="height: 100%; margin: 0">
+    <div id="container" style="height: 100%"></div>
+    <script>
+        var nameset = []; //数组初始化
+        var numset1 = [];
+        var numset2 = [];
+        var numset3 = [];
+        var numset4 = [];
+        var numset5 = [];
+
+        //获取csv对象
+        let csv = d3.dsv(",", "text/csv;charset=gb2312"); // 逗号分割，设置编码，这样就可以正常显示中文了
+        // 获取数据
+        csv("data/每天销售额与销售量.csv", function (error, csvdata) {
+            if (error) {
+                console.log(error);
+            } else {
+                console.log(csvdata);
+                for (var i = 0; i < csvdata.length; i++) {
+                    nameset.push(csvdata[i]["日期"]); //对象转数组
+                    numset1.push(parseFloat(csvdata[i]["A每天总交易额"]));
+                    numset2.push(parseFloat(csvdata[i]["B每天总交易额"]));
+                    numset3.push(parseFloat(csvdata[i]["C每天总交易额"]));
+                    numset4.push(parseFloat(csvdata[i]["D每天总交易额"]));
+                    numset5.push(parseFloat(csvdata[i]["E每天总交易额"]));
+                }
+
+                var myChart = echarts.init(document.getElementById("container"));
+
+                var option = {
+                    legend: {}, // 在头部显示每个折线的名称和颜色
+                    xAxis: [
+                        {
+                            type: "category",
+                            data: nameset,
+                            axisPointer: {
+                                type: "shadow",
+
+                            },
+                        },
+                    ],
+                    yAxis: [
+                        {
+                            type: "value",
+
+                        },
+                    ],
+                    dataZoom: [
+                        {
+                            type: 'slider',
+                            xAxisIndex: 0,
+                            filterMode: 'none'
+                        },
+                    ],
+                    series: [
+                        {
+                            name: "A每天总交易额",
+                            type: "bar",
+                            data: numset1,
+                        },
+                        {
+                            name: "B每天总交易额",
+                            type: "bar",
+                            data: numset2,
+                        },
+                        {
+                            name: "C每天总交易额",
+                            type: "bar",
+                            data: numset3,
+                        },
+                        {
+                            name: "D每天总交易额",
+                            type: "bar",
+                            data: numset4,
+                        },
+                        {
+                            name: "E每天总交易额",
+                            type: "bar",
+                            data: numset5,
+                        },
+                    ],
+                    toolbox: {
+                        feature: {
+                            dataView: { show: true, readOnly: false },
+                            magicType: { show: true, type: ['line', 'bar'] },
+                            restore: { show: true },
+                            saveAsImage: { show: true }
+                        }
+                    },
+                    tooltip: { // 鼠标悬浮提示框显示 X和Y 轴数据
+                        trigger: 'axis',
+                        backgroundColor: 'rgba(32, 33, 36,.7)',
+                        borderColor: 'rgba(32, 33, 36,0.20)',
+                        borderWidth: 1,
+                        textStyle: { // 文字提示样式
+                            color: '#fff',
+                            fontSize: '12'
+                        },
+                        axisPointer: { // 坐标轴虚线
+                            type: 'cross',
+                            label: {
+                                backgroundColor: '#6a7985'
+                            }
+                        }
+                    }
+                };
+
+                if (option && typeof option === 'object') {
+                    myChart.setOption(option);
+                }
+
+                window.addEventListener('resize', myChart.resize);
+            }
+        });
+    </script>
+</body>
+
+</html>

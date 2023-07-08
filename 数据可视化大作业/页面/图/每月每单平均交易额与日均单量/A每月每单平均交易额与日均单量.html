@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en" style="height: 100%">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>折线图的绘制</title>
+  <script src="https://cdn.bootcdn.net/ajax/libs/echarts/5.2.2/echarts.js"></script>
+  <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+</head>
+
+<body style="height: 100%; margin: 0">
+  <div id="main" style="height: 100%"></div>
+  <script>
+    var nameset = []; //数组初始化
+    var numset1 = [];
+    var numset2 = [];
+
+    //获取csv对象
+    let csv = d3.dsv(",", "text/csv;charset=gb2312"); // 逗号分割，设置编码，这样就可以正常显示中文了
+    // 获取数据
+    csv("data/每月每单平均交易额与日均订单量task1-A.csv", function (error, csvdata) {
+      if (error) {
+        console.log(error);
+      } else {
+        console.log(csvdata);
+        for (var i = 0; i < csvdata.length; i++) {
+          nameset.push(csvdata[i]["月份"]); //对象转数组
+          numset1.push(parseFloat(csvdata[i]["日均订单量"]));
+          numset2.push(parseFloat(csvdata[i]["每月的每单平均交易额"]));
+        }
+
+        var myChart = echarts.init(document.getElementById("main"));
+
+        var option = {
+          legend: {}, // 在头部显示每个折线的名称和颜色
+
+          toolbox: {
+            feature: {
+              dataView: { show: true, readOnly: false },
+              magicType: { show: true, type: ['line', 'bar'] },
+              restore: { show: true },
+              saveAsImage: { show: true }
+            }
+          },
+          xAxis: [
+            {
+              type: "category",
+              data: nameset,
+              axisPointer: {
+                type: "shadow",
+
+              },
+            },
+          ],
+
+          yAxis: [
+
+            {
+              alignTicks: false,
+              type: 'value',
+              name: '日均订单量',
+              min: 0,
+              max: 5,
+              interval: 1,
+              axisLabel: {
+                formatter: '{value}'
+              }
+            },
+            {
+              alignTicks: false,
+              type: 'value',
+              name: '交易额',
+              min: 0,
+              max: 100,
+              interval: 20,
+              axisLabel: {
+                formatter: '{value}'
+              }
+            }
+          ],
+          dataZoom: [
+            {
+              type: 'slider',
+              xAxisIndex: 0,
+              filterMode: 'none'
+            },
+          ],
+
+          series: [
+            {
+              name: "每月日均订单量",
+              type: "bar",
+              data: numset2,
+            },
+            {
+              name: "每单平均交易额",
+              type: "line",
+              data: numset1,
+              yAxisIndex: 1,
+            },
+          ],
+          tooltip: {
+            show: true, // 鼠标悬浮提示框显示 X和Y 轴数据
+            trigger: 'axis',
+            backgroundColor: 'rgba(32, 33, 36,.7)',
+            borderColor: 'rgba(32, 33, 36,0.20)',
+            borderWidth: 1,
+            textStyle: { // 文字提示样式
+              color: '#fff',
+              fontSize: '12'
+            },
+            axisPointer: { // 坐标轴虚线
+              type: 'cross',
+              label: {
+                backgroundColor: '#6a7985'
+              }
+            }
+          }
+        };
+
+        if (option && typeof option === 'object') {
+          myChart.setOption(option);
+        }
+
+        window.addEventListener('resize', myChart.resize);
+      }
+    });
+  </script>
+</body>
+
+</html>

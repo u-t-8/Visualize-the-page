@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>CSV Data Visualization</title>
+  <script src="https://code.highcharts.com/highcharts.js"></script>
+  <script src="https://cdn.bootcdn.net/ajax/libs/echarts/5.2.2/echarts.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+</head>
+
+<body>
+  <div id="container" style="width:100%; height:400px;"></div>
+
+
+  <script type="text/javascript">
+         var numset=[];//数组初始化
+         var numset1=[];
+         var numset2=[];
+         var numset3=[];
+         var numset4=[];
+         
+  //获取csv对象
+         let csv = d3.dsv(",", "text/csv;charset=gb2312"); // 逗号分割，设置编码，这样就可以正常显示中文了
+  // 获取数据
+         csv("data2.csv",function(error,csvdata){
+         if(error){
+            console.log(error);
+         }else{
+             console.log(csvdata)
+             for( var i=0; i<csvdata.length; i++ ){
+               numset.push(csvdata[i]['month']);           //对象转数组
+               numset1.push(parseFloat(csvdata[i]['Tokyo']));
+               numset2.push(parseFloat(csvdata[i]['New York']));
+               numset3.push(parseFloat(csvdata[i]['London']));
+               numset4.push(parseFloat(csvdata[i]['Berlin']));
+             }
+             var myChart = echarts.init(document.getElementById("main"));
+
+      var option = {
+        legend: {}, // 在头部显示每个折线的名称和颜色
+        xAxis: [
+          {
+            type: 'category',
+            data: nameset,
+            axisPointer: {
+              type: 'shadow'
+            }
+          }
+        ],
+        yAxis: [
+          {
+            type: 'value',
+          }
+        ],
+        series: [
+          {
+            name: '手机销量',
+            type: 'line',
+            data: numset1,
+          },
+          {
+            name: '电脑销量',
+            type: 'line',
+            data: numset2,
+          }
+        ]
+      };
+
+      myChart.setOption(option);
+    }
+  });
+           
+  </script>
+</body>
+</html>

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en" style="height: 100%">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>增长比例图</title>
+  <script src="https://cdn.bootcdn.net/ajax/libs/echarts/5.2.2/echarts.js"></script>
+  <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+</head>
+
+<body style="height: 100%; margin: 0">
+  <div id="main" style="height: 100%"></div>
+  <script type="text/javascript">
+    var nameset = []; //数组初始化
+    var numset1 = [];
+    //获取csv对象
+    let csv = d3.dsv(",", "text/csv;charset=gb2312"); // 逗号分割，设置编码，这样就可以正常显示中文了
+    // 获取数据
+    csv("data/销量月环比增长率task1-D.csv", function (error, csvdata) {
+      if (error) {
+        console.log(error);
+      } else {
+        console.log(csvdata);
+        for (var i = 0; i < csvdata.length; i++) {
+          nameset.push(csvdata[i]["月份"]); //对象转数组
+          numset1.push(parseFloat(csvdata[i]["销量月环比增长率"]));
+        }
+        // 基于准备好的dom，初始化echarts实例
+        var myChart = echarts.init(document.getElementById("main"));
+
+        // 指定图表的配置项和数据
+        var option = {
+          title: {
+            text: "task1-D",
+          },
+          tooltip: {},
+          legend: {},
+          xAxis: {
+            data: nameset,
+          },
+          yAxis: {},
+          series: [
+            {
+              name: "销量月环比增长率",
+              type: "bar",
+              data: numset1,
+            },
+          ],
+          dataZoom: [
+            {
+              type: 'slider',
+              xAxisIndex: 0,
+              filterMode: 'none'
+            },
+          ],
+          toolbox: {
+            feature: {
+              dataView: { show: true, readOnly: false },
+              magicType: { show: true, type: ['line', 'bar'] },
+              restore: { show: true },
+              saveAsImage: { show: true }
+            }
+          },
+          tooltip: { // 鼠标悬浮提示框显示 X和Y 轴数据
+            trigger: 'axis',
+            backgroundColor: 'rgba(32, 33, 36,.7)',
+            borderColor: 'rgba(32, 33, 36,0.20)',
+            borderWidth: 1,
+            textStyle: { // 文字提示样式
+              color: '#fff',
+              fontSize: '12'
+            },
+            axisPointer: { // 坐标轴虚线
+              type: 'cross',
+              label: {
+                backgroundColor: '#6a7985'
+              }
+            }
+          }
+        };
+        // 使用刚指定的配置项和数据显示图表。
+        if (option && typeof option === 'object') {
+          myChart.setOption(option);
+        }
+
+        window.addEventListener('resize', myChart.resize);
+      }
+    });
+  </script>
+</body>
+
+</html>

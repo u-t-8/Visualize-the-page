@@ -1,0 +1,40 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>读取外部数据</title>
+        <script src="http://d3js.org/d3.v3.min.js"charset="utf-8"></script>
+    </head>
+    <body>
+        <script>
+            //读取json文件
+            d3.json('index.json',function(error,data){
+                console.log(error,data)
+
+            })
+            //读取xml文件
+            d3.xml('index.xml',function(error,data){
+                console.log(error,data)
+
+            })
+            //读取csv文件
+            d3.csv("data.csv",function(error,csvdata){
+                console.log(csvdata)
+                var str=d3.csv.format(csvdata)
+                console.log(str.length)
+                console.log(str)
+
+            })
+            //读取tsv文件
+            d3.tsv("data.tsv",function(error,tsvdata){
+                console.log(tsvdata)
+                var str=d3.tsv.format(tsvdata)
+                console.log(str.length)
+                console.log(str)
+            })
+            
+        </script>
+
+        
+
+    </body>
+</html>

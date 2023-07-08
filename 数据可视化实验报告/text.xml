@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<country>
+    <name>中国</name>
+    <province>
+        <name>四川</name>
+        <cities>
+            <city>成都</city>
+            <city>绵阳</city>
+        </cities>
+    </province>
+   
+</country>

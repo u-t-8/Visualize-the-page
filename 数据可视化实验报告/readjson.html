@@ -1,0 +1,28 @@
+-<!DOCTYPE html>
+<html>
+<meta charset="UTF-8">
+<body>
+<div id="demo"></div>
+<div id="demo2"></div>
+<script>
+    var xhttp = new XMLHttpRequest();
+    xhttp.open("GET", "index.json", true);
+    xhttp.send();
+    xhttp.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 200) {
+        var json = this.responseText;
+        var obj = JSON.parse(json);
+        var i;
+        var html="";
+        var html1="";
+        for (i=0;i<obj.length;i++) {
+        html =html+'<p>'+obj[i].name+'</p>';
+        html1 =html1+'<p>'+obj[i].age+'</p>';
+          }
+        document.getElementById("demo").innerHTML = html;
+        ocument.getElementById("demo2").innerHTML =html1;
+      }
+    }
+  </script>
+</body>
+</html>

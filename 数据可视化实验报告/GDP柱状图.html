@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>柱状图的绘制</title>
+  <script src="https://cdn.bootcdn.net/ajax/libs/echarts/5.2.2/echarts.js"></script>
+  <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+</head>
+<body>
+    <div id="main" style="width: 600px;height:400px;"></div>
+    <script type="text/javascript">
+         var nameset=[];//数组初始化
+         var numset1=[];
+  //获取csv对象
+         let csv = d3.dsv(",", "text/csv;charset=gb2312"); // 逗号分割，设置编码，这样就可以正常显示中文了
+  // 获取数据
+         csv("GDP.csv",function(error,csvdata){
+         if(error){
+            console.log(error);
+         }else{
+             console.log(csvdata)
+             for( var i=0; i<csvdata.length; i++ ){
+               nameset.push(csvdata[i]['年份']);           //对象转数组
+               numset1.push(parseFloat(csvdata[i]['GDP']));
+             }
+        // 基于准备好的dom，初始化echarts实例
+        var myChart = echarts.init(document.getElementById('main'));
+ 
+        // 指定图表的配置项和数据
+        var option = {
+            title: {
+                text: '四川省GDP数据'
+            },
+            tooltip: {},
+            legend: {
+                data:['四川省GDP数据']
+            },
+            xAxis: {
+                data: nameset
+            },
+            yAxis: {},
+            series: [{
+                name: 'GDP',
+                type: 'bar',
+                data: numset1
+            }]
+        };
+ 
+        // 使用刚指定的配置项和数据显示图表。
+        myChart.setOption(option);
+    }
+})
+    </script>
+</body>
+</html>
